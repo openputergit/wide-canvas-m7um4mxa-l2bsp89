@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solo Leveling Fitness - Cyberpunk Edition</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Orbitron', sans-serif;
+        }
+        .glass {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+        }
+        body {
+            background: url('https://images.unsplash.com/photo-1633219417749-1b771f829545?q=80&w=2070') center/cover fixed;
+            position: relative;
+            min-height: 100vh;
+        }
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(0,0,0,0.7), rgba(65,88,208,0.7));
+        }
+        .neon-border {
+            box-shadow: 0 0 10px #0ff, 0 0 20px #0ff, 0 0 30px #0ff;
+            animation: neon 1.5s ease-in-out infinite alternate;
+        }
+        @keyframes neon {
+            from { box-shadow: 0 0 10px #0ff, 0 0 20px #0ff, 0 0 30px #0ff; }
+            to { box-shadow: 0 0 5px #0ff, 0 0 10px #0ff, 0 0 15px #0ff; }
+        }
+        .cyber-button {
+            background: linear-gradient(45deg, #00ffff, #00ccff);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .cyber-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: 0.5s;
+        }
+        .cyber-button:hover::before {
+            left: 100%;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4 relative">
+    <!-- Login Page -->
+    <div id="loginPage" class="glass rounded-xl p-8 w-full max-w-md neon-border">
+        <h1 class="text-4xl font-bold text-cyan-400 text-center mb-8">SOLO LEVELING</h1>
+        <form id="loginForm" class="space-y-6">
+            <div>
+                <input type="email" id="email" placeholder="Enter Gmail" required
+                    class="w-full p-4 rounded-lg bg-black bg-opacity-50 text-cyan-400 placeholder-cyan-600 focus:outline-none border border-cyan-400">
+            </div>
+            <div>
+                <input type="password" id="password" placeholder="Enter Password" required
+                    class="w-full p-4 rounded-lg bg-black bg-opacity-50 text-cyan-400 placeholder-cyan-600 focus:outline-none border border-cyan-400">
+            </div>
+            <button type="submit"
+                class="w-full p-4 rounded-lg cyber-button text-black font-bold text-lg">
+                INITIALIZE SYSTEM
+            </button>
+        </form>
+    </div>
+
+    <!-- Welcome Page -->
+    <div id="welcomePage" class="glass rounded-xl p-8 w-full max-w-md neon-border hidden">
+        <h1 class="text-3xl font-bold text-cyan-400 text-center mb-4">SYSTEM ONLINE</h1>
+        <p class="text-cyan-400 text-center mb-8 text-xl">HUNTER RANK: <span id="currentLevel" class="text-2xl">1</span></p>
+        <div class="space-y-6">
+            <div class="flex items-center justify-between bg-black bg-opacity-50 p-6 rounded-lg border border-cyan-400">
+                <span class="text-cyan-400 text-lg">PUSH-UPS: <span id="pushups">10</span></span>
+                <button onclick="completeExercise('pushups')" class="text-cyan-400 hover:text-cyan-300 transition-colors">
+                    <i class="bi bi-check-circle-fill text-3xl"></i>
+                </button>
+            </div>
+            <div class="flex items-center justify-between bg-black bg-opacity-50 p-6 rounded-lg border border-cyan-400">
+                <span class="text-cyan-400 text-lg">SQUATS: <span id="squats">10</span></span>
+                <button onclick="completeExercise('squats')" class="text-cyan-400 hover:text-cyan-300 transition-colors">
+                    <i class="bi bi-check-circle-fill text-3xl"></i>
+                </button>
+            </div>
+            <div class="flex items-center justify-between bg-black bg-opacity-50 p-6 rounded-lg border border-cyan-400">
+                <span class="text-cyan-400 text-lg">SIT-UPS: <span id="situps">10</span></span>
+                <button onclick="completeExercise('situps')" class="text-cyan-400 hover:text-cyan-300 transition-colors">
+                    <i class="bi bi-check-circle-fill text-3xl"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let level = 1;
+        let completed = {
+            pushups: false,
+            squats: false,
+            situps: false
+        };
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            if (email && password) {
+                document.getElementById('loginPage').classList.add('hidden');
+                document.getElementById('welcomePage').classList.remove('hidden');
+            }
+        });
+
+        function completeExercise(type) {
+            if (!completed[type]) {
+                completed[type] = true;
+                document.querySelector(`#${type}`).parentElement.classList.add('border-green-500');
+                document.querySelector(`button[onclick="completeExercise('${type}')"]`).classList.add('text-green-500');
+                
+                if (completed.pushups && completed.squats && completed.situps) {
+                    setTimeout(() => {
+                        level++;
+                        resetLevel();
+                    }, 500);
+                }
+            }
+        }
+
+        function resetLevel() {
+            document.getElementById('currentLevel').textContent = level;
+            const exerciseCount = level * 10;
+            
+            document.getElementById('pushups').textContent = exerciseCount;
+            document.getElementById('squats').textContent = exerciseCount;
+            document.getElementById('situps').textContent = exerciseCount;
+            
+            completed = {
+                pushups: false,
+                squats: false,
+                situps: false
+            };
+
+            // Reset visual indicators
+            document.querySelectorAll('.border-green-500').forEach(el => {
+                el.classList.remove('border-green-500');
+            });
+            document.querySelectorAll('.text-green-500').forEach(el => {
+                el.classList.remove('text-green-500');
+                el.classList.add('text-cyan-400');
+            });
+
+            // Show level up notification with cyberpunk style
+            const notification = `
+                🔰 LEVEL UP DETECTED 🔰
+                -------------------------
+                NEW RANK: ${level}
+                DIFFICULTY INCREASED
+                REQUIRED REPS: ${exerciseCount}
+                -------------------------
+                PROCEED WITH CAUTION
+            `;
+            alert(notification);
+        }
+    </script>
+<script>document.body.addEventListener('wheel', e => { if (!e.ctrlKey) return; e.preventDefault(); return }, { passive: false })</script>
+	</body>
+</html>
